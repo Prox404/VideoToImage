@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video to Images Converter</title>
+  <style>
+    #videoContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #videoPreview {
+      width: 400px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="videoContainer">
+    <input type="file" id="videoInput" accept="video/*" />
+    <input type="number" id="framesPerSecond" placeholder="Number of frames per second" />
+    <button id="convertBtn">Convert</button>
+  </div>
+  <div id="outputContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
