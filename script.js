@@ -42,3 +42,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
+
+  // Import thư viện ffmpeg.js
+importScripts('https://cdnjs.cloudflare.com/ajax/libs/ffmpeg.js/1.8.0/ffmpeg.min.js');
+
+// Hàm chuyển đổi video sang ảnh
+async function convertVideoToImage(videoFile, outputTime, callback) {
+  // Tạo đối tượng FFmpeg
+  const { createFFmpeg, fetchFile } = FFmpeg;
+  const ffmpeg = createFFmpeg({ log: true });
+
+  try {
+    // Khởi tạo FFmpeg
+    await ffmpeg.load();
+
+    // Đọc file video
+    ffmpeg.FS('readFile', videoFile.name);
+
+    // Chuyển video thành ảnh
+    await ffmpeg.run('-i', videoFile.name, '-ss', outputTime, '-frames', '1', 'output.jpg');
+
+    // Đọc file ảnh
+    const data = ffmpeg.FS('readFile', 'output.jpg');
+
+    // Gọi callback và truyền data ảnh
+    callback(data.buffer);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    // Xóa file tạm
+    ffmpeg.FS('unlink', videoFile.name);
+    ffmpeg.FS('unlink', 'output.jpg');
+  }
+}
+
+// Sử dụng hàm convertVideoToImage
+const videoFile = /* Lấy đối tượng File của video */;
+const outputTime = '00:01';
+convertVideoToImage(videoFile, outputTime, (imageData) => {
+  // imageData chứa dữ liệu ảnh đã chụp từ video
+  // Thực hiện các xử lý tiếp theo với imageData
+});
